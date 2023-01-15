@@ -1,0 +1,167 @@
+Here is an example of a README page that explains how to put all the above things together to get a pizza website up and running:
+
+    Prerequisites
+        Install Apache web server and PHP on your machine or a remote server.
+        Install and set up MySQL.
+        Create a new database and table for storing user credentials.
+
+    File Structure
+        Create a new directory for the pizza website project.
+        Create a new file called "login.php" and place it in the root of the project directory.
+        Create a new file called "index.html" and place it in the root of the project directory.
+
+    PHP Code
+        Copy the PHP code for handling the login form and checking the credentials against the database from above and paste it into the "login.php" file.
+        Update the PHP code with the correct credentials for connecting to the MySQL database (hostname, username, password, and database name)
+        Update the PHP code with the correct table and columns names used in the script to match the table and columns in the database.
+
+    HTML Code
+        Copy the HTML code for the login page from above and paste it into the "index.html" file.
+        Make sure that the form in the HTML code has the action set to "login.php" and the method set to "post"
+
+    Testing
+        Start the Apache web server and MySQL server.
+        Open a web browser and navigate to "http://localhost/index.html"
+        Fill in the login form with the credentials you have in the database and submit the form.
+        If the credentials are correct, the user should be redirected to the members area page.
+        If the credentials are incorrect, an error message should be displayed.
+
+    Security
+        Ensure that the server-side script and the database are properly secured to prevent unauthorized access.
+        Use prepared statement to prevent SQL injection.
+        Use a more secure way to store passwords such as bcrypt, argon2 or scrypt.
+        Validate the inputs.
+
+It is important to note that this is a basic example and the actual implementation may vary depending on the specific requirements of the project. Additionally, it is recommended to use a framework such as Laravel or CodeIgniter to structure the project and make it more maintainable.
+
+
+This HTML page has a form which has two fields: one for the username and the other for the password. This form uses the "post" method and the action is set to "login.php" which will handle the form data submitted.
+
+To connect this HTML login page with the above PHP code, you need to place the PHP code in a file called "login.php" and place it in the same directory as the HTML file. When the form is submitted, the browser will send a request to "login.php" and the PHP code will handle the form data, check the credentials against the database, and authenticate the user.
+
+Make sure that the database is set up and the credentials to connect to the database are correct in the PHP script, and also the table name and column names used in the script should match the table and columns in the database.
+
+```
+Here is an example of a simple HTML login page for a pizza website that can be used with the above PHP code:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pizza Login</title>
+</head>
+<body>
+  <h1>Welcome to Pizza Login</h1>
+  <form action="login.php" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br>
+    <input type="submit" value="Login">
+  </form>
+</body>
+</html>
+
+```
+There are several ways to create a MySQL database, but one common method is to use the MySQL command-line client. Here are the general steps to create a MySQL database:
+
+    Open the MySQL command-line client by running the "mysql" command in your terminal or command prompt.
+
+    Log in to the MySQL server using the appropriate username and password.
+
+    Run the "CREATE DATABASE" command to create a new database. The syntax for this command is as follows:
+
+CREATE DATABASE database_name;
+
+    Use the newly created database by running the "USE" command. The syntax for this command is as follows:
+
+USE database_name;
+
+    Create tables and insert data into the new database. You can do this by running SQL commands.
+
+    To see the list of databases in your mysql server you can use the command
+
+SHOW DATABASES;
+
+It's important to note that these steps assume that you have a MySQL server already installed and running. If you don't have a MySQL server installed, you will need to install it first before being able to create a new database.
+Additionally, you can use web-based management tools such as phpMyAdmin or MySQL Workbench to create, manage and maintain your databases.
+
+
+
+# Here is an example of how you can connect the above PHP code to a MySQL database:
+
+```
+<?php
+    // Connect to the database
+    $host = "hostname";
+    $username = "username";
+    $password = "password";
+    $dbname = "database_name";
+    $conn = mysqli_connect($host, $username, $password, $dbname);
+
+    // Check if the connection was successful
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    // Above code can be added on top of the existing script
+    // Below code is the existing script
+    // Get the user-submitted login credentials
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Check the credentials against the database
+    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($conn, $query);
+    $count = mysqli_num_rows($result);
+
+    // If the credentials are valid, start a new session and store the username
+    if($count == 1) {
+        session_start();
+        $_SESSION['username'] = $username;
+        header("Location: members_area.php");
+    } else {
+        // Otherwise, return an error message
+        echo "Invalid login credentials";
+    }
+
+    mysqli_close($conn);
+?>
+```
+
+Here is an example of a PHP script that stores login credentials when a user logs in:
+
+```
+<?php
+    // Connect to the database
+    $host = "hostname";
+    $username = "username";
+    $password = "password";
+    $dbname = "database_name";
+    $conn = mysqli_connect($host, $username, $password, $dbname);
+
+    // Get the user-submitted login credentials
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Check the credentials against the database
+    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($conn, $query);
+    $count = mysqli_num_rows($result);
+
+    // If the credentials are valid, start a new session and store the username
+    if($count == 1) {
+        session_start();
+        $_SESSION['username'] = $username;
+        header("Location: members_area.php");
+    } else {
+        // Otherwise, return an error message
+        echo "Invalid login credentials";
+    }
+
+    mysqli_close($conn);
+?>
+
+```
+
+In this example, the script first connects to a MySQL database using the mysqli extension. Then, it retrieves the user-submitted login credentials from the $_POST superglobal.
+After that, it runs a query to check if the combination of username and password exist in the users table. If the credentials are valid, a new session is started and the username
+is stored in a session variable. If the credentials are not valid, it returns an error message.
